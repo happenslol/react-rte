@@ -63,6 +63,7 @@ type Props = {
   rootStyle?: Object;
   editorStyle?: Object;
   toolbarStyle?: Object;
+  renderToolbar?: (v: any) => any
 };
 
 export default class RichTextEditor extends Component {
@@ -104,6 +105,7 @@ export default class RichTextEditor extends Component {
       rootStyle,
       toolbarStyle,
       editorStyle,
+      renderToolbar,
       ...otherProps // eslint-disable-line comma-dangle
     } = this.props;
     let editorState = value.getEditorState();
@@ -118,22 +120,22 @@ export default class RichTextEditor extends Component {
     if (readOnly == null) {
       readOnly = disabled;
     }
-    let editorToolbar;
-    if (!readOnly) {
-      editorToolbar = (
-        <EditorToolbar
-          rootStyle={toolbarStyle}
-          isOnBottom={toolbarOnBottom}
-          className={toolbarClassName}
-          keyEmitter={this._keyEmitter}
-          editorState={editorState}
-          onChange={this._onChange}
-          focusEditor={this._focus}
-          toolbarConfig={toolbarConfig}
-          customControls={customControls}
-        />
-      );
-    }
+
+    const editorToolbar = (
+      <EditorToolbar
+        rootStyle={toolbarStyle}
+        isOnBottom={toolbarOnBottom}
+        className={toolbarClassName}
+        keyEmitter={this._keyEmitter}
+        editorState={editorState}
+        onChange={this._onChange}
+        focusEditor={this._focus}
+        toolbarConfig={toolbarConfig}
+        customControls={customControls}
+        renderToolbar={renderToolbar}
+      />
+    );
+
     return (
       <div className={cx(styles.root, className)} style={rootStyle}>
         { !toolbarOnBottom && editorToolbar }

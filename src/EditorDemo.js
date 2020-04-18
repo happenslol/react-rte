@@ -9,6 +9,7 @@ import Dropdown from './ui/Dropdown';
 import IconButton from './ui/IconButton';
 
 import type {EditorValue} from './RichTextEditor';
+import ToolbarConfig from "./lib/EditorToolbarConfig";
 
 type Props = {};
 type State = {
@@ -16,6 +17,25 @@ type State = {
   format: string;
   readOnly: boolean;
 };
+
+export const InlineStyles = {
+  Bold: "BOLD",
+  Italic: "ITALIC",
+  Strikethrough: "STRIKETHROUGH",
+  Code: "CODE",
+  Underline: "UNDERLINE",
+}
+
+export const BlockTypes = {
+  Normal: "unstyled",
+  HeadingOne: "header-one",
+  HeadingTwo: "header-two",
+  HeadingThree: "header-three",
+  CodeBlock: "code-block",
+  UnorderedListItem: "unordered-list-item",
+  OrderedListItem: "ordered-list-item",
+  BlockQuote: "blockquote",
+}
 
 export default class EditorDemo extends Component {
   props: Props;
@@ -47,6 +67,15 @@ export default class EditorDemo extends Component {
             placeholder="Tell a story"
             toolbarClassName="demo-toolbar"
             editorClassName="demo-editor"
+            renderToolbar={({ toggleInlineStyle, inlineStyle }) => (
+              <React.Fragment>
+                <button onMouseDown={e => {
+                  e.preventDefault()
+                  toggleInlineStyle("BOLD")
+                }}>bold</button>
+                {JSON.stringify(inlineStyle)}
+              </React.Fragment>
+            )}
             readOnly={this.state.readOnly}
             customControls={[
               // eslint-disable-next-line no-unused-vars

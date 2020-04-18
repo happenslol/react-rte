@@ -33,6 +33,7 @@ type Props = {
   customControls: Array<CustomControl>;
   rootStyle?: Object;
   isOnBottom?: boolean;
+  renderToolbar?: (v: any) => any
 };
 
 type State = {
@@ -67,11 +68,49 @@ export default class EditorToolbar extends Component {
   }
 
   render() {
-    let {className, toolbarConfig, rootStyle, isOnBottom} = this.props;
+    let {className, toolbarConfig, rootStyle, isOnBottom, renderToolbar} = this.props;
     if (toolbarConfig == null) {
       toolbarConfig = DefaultToolbarConfig;
     }
+
     let display = toolbarConfig.display || DefaultToolbarConfig.display;
+
+    if (renderToolbar) {
+      let {editorState} = this.props;
+      let selection = editorState.getSelection();
+      let entity = this._getEntityAtCursor();
+      let hasSelection = !selection.isCollapsed();
+      let isCursorOnLink = (entity != null && entity.type === ENTITY_TYPE.LINK);
+      let shouldShowLinkButton = hasSelection || isCursorOnLink;
+      let linkValue = (entity && isCursorOnLink) ? entity.getData().url : '';
+
+      let canUndo = editorState.getUndoStack().size !== 0;
+      let canRedo = editorState.getRedoStack().size !== 0;
+
+      const toolbarProps = {
+        blockType: this._getCurrentBlockType(),
+        toggleBlockType: this._toggleBlockType,
+
+        inlineStyle: editorState.getCurrentInlineStyle(),
+        toggleInlineStyle: this._toggleInlineStyle,
+
+        linkValue: linkValue,
+        setLink: this._setLink,
+        removeLink: this._removeLink,
+        cursorOnLink: isCursorOnLink,
+        showLinkButton: shouldShowLinkButton,
+
+        setImage: this._setImage,
+
+        canUndo: canUndo,
+        canRedo: canRedo,
+        undo: this._undo,
+        redo: this._redo,
+      };
+
+      return renderToolbar(toolbarProps);
+    }
+
     let buttonGroups = display.map((groupName) => {
       switch (groupName) {
         case 'INLINE_STYLE_BUTTONS': {
