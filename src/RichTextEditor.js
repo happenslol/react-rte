@@ -55,6 +55,7 @@ type Props = {
   customControls?: Array<CustomControl>;
   readOnly?: boolean;
   disabled?: boolean; // Alias of readOnly
+  textAlignment?: string;
   toolbarConfig?: ToolbarConfig;
   toolbarOnBottom?: boolean;
   blockStyleFn?: (block: ContentBlock) => ?string;
@@ -106,6 +107,7 @@ export default class RichTextEditor extends Component {
       toolbarStyle,
       editorStyle,
       renderToolbar,
+      textAlignment,
       ...otherProps // eslint-disable-line comma-dangle
     } = this.props;
     let editorState = value.getEditorState();
@@ -148,6 +150,7 @@ export default class RichTextEditor extends Component {
             handleReturn={this._handleReturn}
             keyBindingFn={keyBindingFn || this._customKeyHandler}
             handleKeyCommand={this._handleKeyCommand}
+            textAlignment={textAlignment || 'left'}
             onTab={this._onTab}
             onChange={this._onChange}
             placeholder={placeholder}

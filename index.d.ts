@@ -136,9 +136,6 @@ type BlockType =
   | "ordered-list-item"
   | "blockquote";
 
-export declare const InlineStyles: { [name: string]: InlineStyle };
-export declare const BlockTypes: { [name: string]: BlockType };
-
 interface Props {
   className?: string;
   toolbarClassName?: string;
@@ -158,6 +155,7 @@ interface Props {
   rootStyle?: object;
   editorStyle?: object;
   toolbarStyle?: object;
+  textAlignment?: "left" | "right" | "center";
   renderToolbar?: (props: {
     blockType: string;
     toggleBlockType: (blockType: BlockType) => void;
