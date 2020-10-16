@@ -1,6 +1,6 @@
 {
   "name": "@happens-lol/react-rte",
-  "version": "0.18.0",
+  "version": "0.18.1",
   "private": false,
   "description": "React Rich Text Editor",
   "main": "dist/react-rte.js",
